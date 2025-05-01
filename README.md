@@ -1,155 +1,128 @@
-# 📊 Sales Forecasting Project
+# Proyek Sales Forecasting - Kategori Cleaning
 
-## 📝 Overview
+## Tentang Proyek
 
-This project implements time series forecasting models to predict sales and promotion effects for retail data. The analysis **specifically focuses on the "CLEANING" product category** from a larger retail dataset and employs both traditional statistical methods and modern deep learning approaches.
+Hai! Ini adalah proyek saya untuk memprediksi penjualan produk kategori "CLEANING" menggunakan beberapa model machine learning dan deep learning. Proyek ini dibuat sebagai bagian dari pembelajaran saya tentang analisis time series dan forecasting.
 
-## 🎯 Project Goals
+## Dataset
 
-- Analyze sales patterns and their relationship with promotional activities for cleaning products
-- Develop accurate forecasting models for predicting future cleaning product sales
-- Compare the performance of different forecasting algorithms
-- Provide insights for inventory management and promotion planning in the cleaning category
+Saya menggunakan dataset `store5.csv` yang berisi data penjualan harian. Untuk proyek ini, saya hanya fokus pada data produk kategori "CLEANING" saja. Dataset memiliki beberapa kolom penting:
 
-## 🔍 Dataset Description
+- `date` - Tanggal transaksi
+- `store_nbr` - Nomor toko (saya pakai toko nomor 5)
+- `family` - Kategori produk (saya filter hanya "CLEANING")
+- `sales` - Jumlah penjualan
+- `onpromotion` - Jumlah item yang sedang promosi
+- `dcoilwtico` - Harga minyak (sebagai faktor eksternal)
 
-The dataset is derived from `store5.csv` which contains daily sales data across multiple product categories. For this analysis, we've filtered to focus exclusively on the "CLEANING" product category. The relevant features include:
+## Apa yang Saya Lakukan
 
-| Column | Description |
-|--------|-------------|
-| date | Date of the transaction |
-| store_nbr | Store number identifier (filter: store_nbr = 5) |
-| family | Product family/category (filter: family = "CLEANING") |
-| sales | Sales volume/value for cleaning products |
-| onpromotion | Number of cleaning items on promotion |
-| dcoilwtico | Oil price index - external factor |
+### Preprocessing Data
+- Mengatasi missing values dengan interpolasi polinomial
+- Transformasi Box-Cox untuk data yang tidak normal
+- Menangani tanggal yang hilang (misalnya hari Natal)
+- Analisis stasioneritas dan differencing
 
-**Data Selection Focus:** From the original dataset containing multiple product categories across different stores, we specifically analyze store #5's cleaning products data to develop a focused forecasting model for this category.
+### Model yang Saya Coba
 
-## 🛠️ Methods & Models
-
-### Data Preprocessing
-- Missing value handling using polynomial interpolation
-- Box-Cox transformation for non-normal distributed data
-- Handling of missing dates (e.g., holidays like Christmas)
-- Stationarity analysis and differencing
-
-### Models Implemented
-1. **VARMAX** (Vector Autoregressive Moving Average with Exogenous variables)
-   - Multivariate time series model
-   - Captures relationships between cleaning product sales and promotional activities
-   - Incorporates external factors (oil price)
+1. **VARMAX**
+   - Model statistik tradisional
+   - Bisa menangkap hubungan antara sales dan promosi
 
 2. **Single Layer LSTM**
-   - Basic deep learning approach for time series
-   - Captures long-term dependencies in cleaning products sales patterns
+   - Model deep learning dasar
+   - Untuk mempelajari pola jangka panjang
 
 3. **Stacked LSTM**
-   - Multi-layered architecture for capturing complex patterns
-   - Enhanced representational capacity for seasonal trends in cleaning product sales
+   - LSTM dengan beberapa layer
+   - Untuk pola yang lebih kompleks
 
 4. **Bidirectional LSTM**
-   - Learns patterns from both past and future contexts
-   - Often provides better performance for time series prediction
+   - LSTM dua arah
+   - Biasanya performa lebih baik untuk forecasting
 
-## 📋 Hasil & Perbandingan (Results & Comparison)
+## Hasil Perbandingan Model
 
-Perbandingan performa model berdasarkan RMSE (Root Mean Squared Error) untuk prediksi sales dan promosi dalam kategori CLEANING:
+Berikut perbandingan RMSE (Root Mean Squared Error) untuk setiap model - nilai lebih kecil berarti prediksi lebih akurat:
 
-| Model | Sales RMSE | Onpromotion RMSE |
-|-------|------------|------------------|
-| VARMAX | xxx.xx | xx.xx |
-| Single LSTM | xxx.xx | xx.xx |
-| Stacked LSTM | xxx.xx | xx.xx |
-| Bidirectional LSTM | xxx.xx | xx.xx |
+| Model | Test RMSE Sales | Test RMSE Onpromotion | Train RMSE Onpromotion |
+|-------|----------------|---------------------|---------------------|
+| Bidirectional LSTM | 218.55 | 7.79 | 2.17 |
+| Single LSTM | 230.57 | 7.80 | 2.22 |
+| Stacked LSTM | 249.49 | 11.72 | 2.77 |
+| VARMAX | 226.26 | 26.58 | - |
 
-*Note: Replace the placeholder values with actual results from your analysis.*
+Berdasarkan hasil ini, **Bidirectional LSTM** menunjukkan performa terbaik dengan RMSE terendah untuk prediksi sales (218.55) dan RMSE terendah untuk prediksi onpromotion (7.79).
 
-## 📊 Visualisasi Utama (Key Visualizations)
+## Visualisasi yang Saya Buat
 
-Beberapa visualisasi penting yang dihasilkan dalam analisis kategori CLEANING:
+1. Plot time series sales dan onpromotion
+2. Dekomposisi musiman (trend, seasonal, residual)
+3. Plot ACF dan PACF untuk analisis pola
+4. Perbandingan nilai aktual vs prediksi
+5. Grafik perbandingan model
 
-1. Time series plot untuk sales dan onpromotion pada produk cleaning
-2. Seasonal decomposition (trend, seasonal, residual) 
-3. ACF dan PACF plots untuk analisis pola
-4. Perbandingan nilai aktual vs. prediksi untuk setiap model
-5. Perbandingan performa model (bar charts)
+## Cara Menjalankan Kode Ini
 
-## 🔧 Penggunaan (Usage)
-
-### Persyaratan (Requirements)
+### Yang Perlu Diinstall
 
 ```
-pandas==1.5.3
-numpy==1.24.3
-matplotlib==3.7.1
-seaborn==0.12.2
-statsmodels==0.14.0
-scikit-learn==1.3.0
-tensorflow==2.13.0
-scipy==1.10.1
+pandas
+numpy
+matplotlib
+seaborn
+statsmodels
+scikit-learn
+tensorflow
+scipy
 ```
 
-### Menjalankan Kode (Running the Code)
+### Langkah-Langkah
 
-1. Clone repository ini:
-```bash
-git clone https://github.com/yourusername/sales-forecasting.git
-cd sales-forecasting
+1. Install library yang diperlukan:
+```
+pip install pandas numpy matplotlib seaborn statsmodels scikit-learn tensorflow scipy
 ```
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
+2. Pastikan file dataset tersedia:
+```
+store5.csv 
 ```
 
-3. Sesuaikan path file pada bagian awal script:
+3. Sesuaikan path file di awal kode:
 ```python
-# Path file (sesuaikan dengan lokasi Anda)
-FILE_PATH = 'path/to/your/store5.csv'
-OUTPUT_PATH = 'path/to/your/output/store5.xlsx'
+FILE_PATH = '/path/ke/store5.csv'
+OUTPUT_PATH = '/path/ke/output/store5.xlsx'
 ```
 
-4. Jalankan script utama:
-```bash
+4. Jalankan kode:
+```
+# Di Jupyter atau Google Colab
+%run sales_forecasting.py
+
+# Atau di terminal
 python sales_forecasting.py
 ```
 
-*Note: Script akan otomatis memfilter dataset untuk kategori "CLEANING" dan melakukan seluruh analisis hanya pada data tersebut.*
+## Apa yang Saya Pelajari
 
-## 📋 Struktur Proyek (Project Structure)
+Dari proyek ini, saya belajar:
 
-```
-sales-forecasting/
-│
-├── data/
-│   ├── store5.csv            # Raw data (all categories)
-│   └── store5.xlsx           # Processed data (output)
-│
-├── notebooks/
-│   └── sales_forecasting.ipynb  # Jupyter notebook (exploratory)
-│
-├── src/
-│   ├── sales_forecasting.py     # Main script
-│   └── utils.py                 # Utility functions
-│
-├── visualizations/             # Generated plots and charts
-│
-├── requirements.txt            # Dependencies
-└── README.md                   # This documentation
-```
+1. Cara preprocessing data time series
+2. Metode analisis stasioneritas
+3. Implementasi model VARMAX dan LSTM
+4. Perbandingan performa model forecasting
+5. Visualisasi data time series
 
-## 🚀 Kesimpulan & Rekomendasi (Conclusions & Recommendations)
+## Kesimpulan
 
-Berdasarkan analisis yang telah dilakukan pada kategori produk CLEANING, beberapa kesimpulan dan rekomendasi:
+Berdasarkan analisis saya pada data kategori CLEANING:
 
-1. Model [BEST_MODEL] menunjukkan performa terbaik dengan RMSE terendah untuk prediksi sales produk cleaning.
-2. Terdapat korelasi positif (0.45) antara aktivitas promosi dan penjualan produk cleaning.
-3. Pola mingguan (weekly seasonality) terlihat jelas dalam data penjualan produk cleaning.
-4. Faktor eksternal seperti harga minyak memiliki korelasi rendah dengan penjualan produk cleaning.
+1. Terdapat pola mingguan yang jelas dalam penjualan
+2. Ada korelasi positif (0.45) antara promosi dan penjualan
+3. Model **Bidirectional LSTM** memberikan hasil prediksi paling akurat, dengan RMSE terendah baik untuk prediksi sales maupun onpromotion
+4. Harga minyak tidak terlalu berpengaruh terhadap penjualan produk cleaning
+5. Model deep learning (terutama Bidirectional LSTM) secara signifikan lebih baik dalam memprediksi jumlah onpromotion dibandingkan model statistik tradisional (VARMAX)
 
-Rekomendasi untuk implementasi bisnis kategori CLEANING:
-- Fokuskan promosi pada periode dengan penjualan rendah untuk meratakan inventory produk cleaning
-- Gunakan model [BEST_MODEL] untuk peramalan jangka pendek (1-7 hari)
-- Perbarui model secara berkala (misalnya bulanan) untuk menjaga akurasi prediksi
-- Pertimbangkan untuk mengembangkan model serupa untuk kategori produk lainnya
+
+---
